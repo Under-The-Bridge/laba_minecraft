@@ -38,7 +38,7 @@ class CraftController extends Controller
             $result = $inventory->get($recipe->result_item_id) ?? new Inventory;
             $result->player_id = $player_id;
             $result->item_id = $recipe->result_item_id;
-            $result->quantity += $recipe->result_quantity;
+            $result->quantity = ($result->quantity ?? 0) + $recipe->result_quantity;
 
             if ($result->quantity > 4294967295) {
                 throw ValidationException::withMessages(['recipe_id' => 'В инвентаре уже слишком много таких предметов']);

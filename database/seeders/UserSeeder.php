@@ -9,6 +9,18 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->count(max(0, 5 - User::count()))->create();
+        $count = User::count();
+
+        for ($i = 1; $i <= 5 && $count < 5; $i++) {
+            $email = 'player'.$i.'@example.test';
+
+            if (!User::where('email', $email)->exists()) {
+                User::factory()->create([
+                    'name' => 'Игрок '.$i,
+                    'email' => $email,
+                ]);
+                $count++;
+            }
+        }
     }
 }

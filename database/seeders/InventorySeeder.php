@@ -13,6 +13,10 @@ class InventorySeeder extends Seeder
         $resources = Item::where('type', 'resource')->get();
 
         foreach (User::all() as $player) {
+            if ($player->items()->exists()) {
+                continue;
+            }
+
             foreach ($resources->random(fake()->numberBetween(5, 10)) as $resource) {
                 $player->items()->attach($resource->id, [
                     'quantity' => fake()->numberBetween(10, 100),

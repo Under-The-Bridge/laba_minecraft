@@ -3,7 +3,7 @@
     $result = old('result_item_id', $recipe->result_item_id ?? '');
     $quantity = old('result_quantity', $recipe->result_quantity ?? 1);
     $ingredients = session()->hasOldInput()
-        ? collect(old('ingredients'))->keyBy('id')
+        ? collect(old('ingredients'))->filter(fn ($ingredient) => is_scalar(data_get($ingredient, 'id')))->keyBy('id')
         : collect(isset($recipe) ? $recipe->ingredients : [])->keyBy('id');
 @endphp
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ItemFactory extends Factory
 {
-    public $items = [
+    public const ITEMS = [
         ['name' => 'Железо', 'slug' => 'iron', 'type' => 'resource'],
         ['name' => 'Дерево', 'slug' => 'wood', 'type' => 'resource'],
         ['name' => 'Камень', 'slug' => 'stone', 'type' => 'resource'],
@@ -31,20 +31,32 @@ class ItemFactory extends Factory
 
     public function definition(): array
     {
-        return fake()->unique()->randomElement($this->items);
+        return $this->itemAttributes(self::ITEMS);
     }
 
     public function resource(): static
     {
-        return $this->state(fn (array $attributes) => fake()->unique()->randomElement(
-            array_values(array_filter($this->items, fn ($item) => $item['type'] === 'resource'))
-        ));
+        $items = array_filter(self::ITEMS, fn ($item) => $item['type'] === 'resource');
+        return $this->state(fn () => $this->itemAttributes($items));
     }
 
     public function equipment(): static
     {
-        return $this->state(fn (array $attributes) => fake  ()->unique()->randomElement(
-            array_values(array_filter($this->items, fn ($item) => $item['type'] !== 'resource'))
-        ));
+        $items = array_filter(self::ITEMS, fn ($item) => $item['type'] !== 'resource');
+        return $this->state(fn () => $this->itemAttributes($items));
+    }
+
+    private function itemAttributes(array $items): array
+    {
+        $item = null;
+        $pick = function () use (&$item, $items) {
+            return $item ??= fake()->unique()->randomElement($items);
+        };
+
+        return [
+            'name' => fn () => $pick()['name'],
+            'slug' => fn () => $pick()['slug'],
+            'type' => fn () => $pick()['type'],
+        ];
     }
 }
