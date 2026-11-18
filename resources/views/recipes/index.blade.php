@@ -12,27 +12,27 @@
                     <th scope="col">Количество</th>
                     <th scope="col">Ресурсы</th>
                     <th scope="col">Просмотр</th>
-                    <th scope="col">Редактировать</th>
+                    <th scope="col">Редакт.</th>
                     <th scope="col">Удалить</th>
                     <th scope="col">Скрафтить</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($recipe as $item)
+                @forelse ($recipes as $recipe)
                     <tr>
-                        <th scope="row">{{ $item->id }}</th>
-                        <td>{{ $item->name }}</td>
-                        <td>{{ $item->resultItem->name }}</td>
-                        <td>{{ $item->result_quantity }}</td>
+                        <th scope="row">{{ $recipe->id }}</th>
+                        <td>{{ $recipe->name }}</td>
+                        <td>{{ $recipe->resultItem->name }}</td>
+                        <td>{{ $recipe->result_quantity }}</td>
                         <td>
-                            @foreach ($item->ingredients as $ingredient)
-                                {{ $ingredient->name }} — {{ $ingredient->pivot->quantity }} шт.@if (!$loop->last)<br>@endif
+                            @foreach ($recipe->ingredients as $ingredient)
+                                <div>{{ $ingredient->name }} — {{ $ingredient->pivot->quantity }}</div>
                             @endforeach
                         </td>
-                        <td><button class="btn btn-primary" type="button">Просмотр</button></td>
-                        <td><button class="btn btn-warning" type="button">Редактировать</button></td>
-                        <td><button class="btn btn-danger" type="button">Удалить</button></td>
-                        <td><button class="btn btn-success" type="button">Скрафтить</button></td>
+                        <td><a href="{{ url('/recipes/'.$recipe->id) }}">Просмотр</a></td>
+                        <td><a href="{{ url('/recipes/'.$recipe->id.'/edit') }}">Редакт.</a></td>
+                        <td>@include('recipes.delete')</td>
+                        <td>@include('recipes.craft')</td>
                     </tr>
                 @empty
                     <tr>
