@@ -36,7 +36,10 @@
                         <button type="submit" class="btn btn-outline-secondary btn-sm">Выйти</button>
                     </form>
                 @else
-                    <a class="nav-link" href="{{ url('/login') }}">Войти</a>
+                    <div class="d-flex gap-3">
+                        <a class="nav-link" href="{{ url('/login') }}">Войти</a>
+                        <a class="nav-link" href="{{ route('register') }}">Регистрация</a>
+                    </div>
                 @endauth
             </div>
         </div>

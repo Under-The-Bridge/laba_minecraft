@@ -11,6 +11,8 @@ Route::get('/recipes', [RecipeController::class,'index']);
 Route::get('/recipes/{id}', [RecipeController::class,'show'])->whereNumber('id');
 
 Route::middleware('guest')->group(function () {
+    Route::view('/register', 'register')->name('register');
+    Route::post('/register', [AuthController::class,'register'])->middleware('throttle:10,1');
     Route::get('/login', [AuthController::class,'login_page'])->name('login');
     Route::post('/login', [AuthController::class,'login'])->middleware('throttle:10,1');
 });
